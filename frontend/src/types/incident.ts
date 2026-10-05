@@ -1,8 +1,9 @@
 export type IncidentStatus =
   | "Detected"
   | "Verified"
-  | "Cleanup scheduled";
-
+  | "Cleanup scheduled"
+  | "Resolved";
+  
 export type ForecastPoint = {
   time: string;
   label: string;

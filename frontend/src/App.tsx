@@ -1,5 +1,6 @@
 import CoastalMap from "./components/CoastalMap";
 import { useMemo, useState } from "react";
+import type { ReactNode } from "react";
 import {
   AlertTriangle,
   ChevronRight,
@@ -323,6 +324,27 @@ const navItems = [
 function App() {
   const [activeNav, setActiveNav] = useState("Mission Control");
 
+    const [incidentStatuses, setIncidentStatuses] = useState<
+    Record<string, Incident["status"]>
+  >(() =>
+    Object.fromEntries(
+      incidents.map((incident) => [incident.id, incident.status]),
+    ) as Record<string, Incident["status"]>,
+  );
+
+  const updateIncidentStatus = (
+    incidentId: string,
+    status: Incident["status"],
+  ) => {
+    setIncidentStatuses((current) => ({
+      ...current,
+      [incidentId]: status,
+    }));
+  };
+
+  const getIncidentStatus = (incident: Incident) =>
+    incidentStatuses[incident.id] ?? incident.status;
+
   const [selectedIncident, setSelectedIncident] =
     useState<Incident | null>(incidents[0]);
 
@@ -334,14 +356,14 @@ function App() {
   );
 
   const pendingVerificationCount = useMemo(
-    () =>
-      incidents.filter(
-        (incident) =>
-          incident.status === "Detected" ||
-          incident.status === "Verified",
-      ).length,
-    [],
-  );
+  () =>
+    incidents.filter((incident) => {
+      const status = incidentStatuses[incident.id] ?? incident.status;
+
+      return status === "Detected" || status === "Verified";
+    }).length,
+  [incidentStatuses],
+);
 
   const forecastTrackCount = useMemo(
     () => incidents.filter((incident) => incident.forecast.length > 0).length,
@@ -656,7 +678,6 @@ function App() {
                   />
 
                 </div>
-
                 {/* REAL LEAFLET MAP */}
 
                 <div className="absolute inset-0">
@@ -751,7 +772,7 @@ function App() {
                       </div>
 
                     </div>
-
+    
                     {/* DETECTION INTELLIGENCE */}
 
 <div>
@@ -1495,32 +1516,140 @@ function App() {
 
                     </div>
 
-                    {/* ACTIONS */}
+                    {/* FIELD RESPONSE WORKFLOW */}
 
-                    <div className="flex gap-2">
+<div className="rounded-xl border border-emerald-300/10 bg-emerald-300/[0.03] p-4">
 
-                      <button className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-cyan-400 px-3 py-2.5 text-xs font-semibold text-[#03131b] hover:bg-cyan-300">
+  <div className="flex items-center justify-between">
 
-                        <ShieldCheck className="h-4 w-4" />
+    <div>
 
-                        Verify
+      <div className="text-[9px] font-semibold uppercase tracking-[0.16em] text-emerald-300">
+        Field response
+      </div>
 
-                      </button>
+      <div className="mt-1 text-[10px] text-slate-500">
+        Operational workflow for this incident
+      </div>
 
-                      <button className="rounded-lg border border-white/10 px-3 py-2.5 text-xs text-slate-400 hover:border-cyan-300/20 hover:text-white">
-                        Details
-                      </button>
+    </div>
 
-                    </div>
+    <ShieldCheck className="h-4 w-4 text-emerald-300" />
 
-                  </div>
+  </div>
 
-                )}
+  <div className="mt-4">
 
-              </div>
+    <div className="mb-2 flex items-center justify-between">
 
-            </div>
+      <span className="text-[9px] uppercase tracking-wider text-slate-600">
+        Current status
+      </span>
 
+      <span className="text-[10px] font-semibold text-slate-300">
+        {getIncidentStatus(selectedIncident)}
+      </span>
+
+    </div>
+
+    <div className="h-1.5 overflow-hidden rounded-full bg-white/5">
+
+      <div
+        className="h-full rounded-full bg-emerald-400 transition-all duration-500"
+        style={{
+          width:
+            getIncidentStatus(selectedIncident) === "Detected"
+              ? "25%"
+              : getIncidentStatus(selectedIncident) === "Verified"
+                ? "50%"
+                : getIncidentStatus(selectedIncident) ===
+                    "Cleanup scheduled"
+                  ? "75%"
+                  : "100%",
+        }}
+      />
+
+    </div>
+
+  </div>
+
+  <div className="mt-4 grid grid-cols-1 gap-2">
+
+    {getIncidentStatus(selectedIncident) === "Detected" && (
+      <button
+        onClick={() =>
+          updateIncidentStatus(selectedIncident.id, "Verified")
+        }
+        className="flex items-center justify-center gap-2 rounded-lg bg-cyan-400 px-3 py-2.5 text-xs font-semibold text-[#03131b] transition hover:bg-cyan-300"
+      >
+        <ShieldCheck className="h-4 w-4" />
+        Verify Detection
+      </button>
+    )}
+
+    {getIncidentStatus(selectedIncident) === "Verified" && (
+      <button
+        onClick={() =>
+          updateIncidentStatus(
+            selectedIncident.id,
+            "Cleanup scheduled",
+          )
+        }
+        className="flex items-center justify-center gap-2 rounded-lg bg-amber-400 px-3 py-2.5 text-xs font-semibold text-[#03131b] transition hover:bg-amber-300"
+      >
+        <MapPinned className="h-4 w-4" />
+        Schedule Cleanup
+      </button>
+    )}
+
+    {getIncidentStatus(selectedIncident) === "Cleanup scheduled" && (
+      <button
+        onClick={() =>
+          updateIncidentStatus(selectedIncident.id, "Resolved")
+        }
+        className="flex items-center justify-center gap-2 rounded-lg bg-emerald-400 px-3 py-2.5 text-xs font-semibold text-[#03131b] transition hover:bg-emerald-300"
+      >
+        <ShieldCheck className="h-4 w-4" />
+        Mark Resolved
+      </button>
+    )}
+
+    {getIncidentStatus(selectedIncident) === "Resolved" && (
+      <div className="rounded-lg border border-emerald-300/10 bg-emerald-300/[0.04] px-3 py-2.5 text-center text-[10px] font-semibold text-emerald-300">
+        ✓ Incident resolved
+      </div>
+    )}
+
+  </div>
+
+</div>
+
+{/* ACTIONS */}
+
+<div className="flex gap-2">
+
+  <button
+    onClick={() => setSelectedIncident(selectedIncident)}
+    className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-cyan-400 px-3 py-2.5 text-xs font-semibold text-[#03131b] hover:bg-cyan-300"
+  >
+    <Eye className="h-4 w-4" />
+    Focus Incident
+  </button>
+
+  <button className="rounded-lg border border-white/10 px-3 py-2.5 text-xs text-slate-400 hover:border-cyan-300/20 hover:text-white">
+    Details
+  </button>
+
+</div>
+
+</div>
+)}
+</div>
+</div>
+
+{/* ===================================================== */}
+{/* INCIDENT TABLE */}
+{/* ===================================================== */}
             {/* ===================================================== */}
             {/* INCIDENT TABLE */}
             {/* ===================================================== */}
@@ -1667,15 +1796,15 @@ function App() {
 
                             <span
                               className={`h-1.5 w-1.5 rounded-full ${
-                                incident.status === "Cleanup scheduled"
+                                getIncidentStatus(incident) === "Cleanup scheduled"
                                   ? "bg-emerald-400"
-                                  : incident.status === "Verified"
+                                  : getIncidentStatus(incident) === "Verified"
                                     ? "bg-cyan-400"
                                     : "bg-amber-400"
                               }`}
                             />
 
-                            {incident.status}
+                            {getIncidentStatus(incident)}
 
                           </span>
 
@@ -1721,7 +1850,7 @@ function App() {
 
               </div>
 
-              <div className="shrink-0 rounded-full border border-amber-300/10 bg-amber-300/[0.04] px-3 py-1.5 text-[9px] font-semibold tracking-wider text-amber-300">
+                                        <div className="shrink-0 rounded-full border border-amber-300/10 bg-amber-300/[0.04] px-3 py-1.5 text-[9px] font-semibold tracking-wider text-amber-300">
                 SIMULATED DATA
               </div>
 
@@ -1735,6 +1864,7 @@ function App() {
     </div>
   );
 }
+  
 
 /* =============================================================== */
 /* STAT CARD */
@@ -1799,7 +1929,7 @@ function Detail({
   children,
 }: {
   label: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <div className="rounded-lg border border-white/5 bg-white/[0.02] p-3">
@@ -1824,7 +1954,7 @@ function SectionTitle({
   icon,
   title,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
 }) {
   return (
