@@ -944,82 +944,289 @@ function App() {
 
                     {/* PRIORITY */}
 
-                    <div>
+<div>
 
-                      <SectionTitle
-                        icon={<AlertTriangle className="h-4 w-4" />}
-                        title="Decision intelligence"
-                      />
+  <SectionTitle
+    icon={<AlertTriangle className="h-4 w-4" />}
+    title="Decision intelligence"
+  />
 
-                      <div className="mt-3 rounded-xl border border-white/5 bg-white/[0.02] p-4">
+  {/* PRIORITY SCORE */}
 
-                        <div className="flex items-end justify-between">
+  <div className="mt-3 rounded-xl border border-white/5 bg-white/[0.02] p-4">
 
-                          <div>
+    <div className="flex items-start justify-between gap-4">
 
-                            <div className="text-[9px] uppercase tracking-wider text-slate-500">
-                              Priority score
-                            </div>
+      <div>
 
-                            <div
-                              className={`mt-1 text-3xl font-semibold ${
-                                selectedIncident.priority >= 80
-                                  ? "text-red-300"
-                                  : selectedIncident.priority >= 60
-                                    ? "text-amber-300"
-                                    : "text-cyan-300"
-                              }`}
-                            >
-                              {selectedIncident.priority}
-                              <span className="text-sm text-slate-600">
-                                /100
-                              </span>
-                            </div>
+        <div className="text-[9px] uppercase tracking-[0.18em] text-slate-500">
+          Priority score
+        </div>
 
-                          </div>
+        <div
+          className={`mt-1 text-3xl font-semibold ${
+            selectedIncident.priority >= 80
+              ? "text-red-300"
+              : selectedIncident.priority >= 60
+                ? "text-amber-300"
+                : "text-cyan-300"
+          }`}
+        >
+          {selectedIncident.priority}
+          <span className="text-sm text-slate-600">
+            /100
+          </span>
+        </div>
 
-                          <RiskBadge
-                            level={selectedIncident.riskLevel}
-                          />
+      </div>
 
-                        </div>
+      <RiskBadge
+        level={selectedIncident.riskLevel}
+      />
 
-                        <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/5">
+    </div>
 
-                          <div
-                            className={`h-full rounded-full ${
-                              selectedIncident.priority >= 80
-                                ? "bg-red-400"
-                                : selectedIncident.priority >= 60
-                                  ? "bg-amber-400"
-                                  : "bg-cyan-400"
-                            }`}
-                            style={{
-                              width: `${selectedIncident.priority}%`,
-                            }}
-                          />
+    {/* SCORE BAR */}
 
-                        </div>
+    <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/5">
 
-                      </div>
+      <div
+        className={`h-full rounded-full transition-all ${
+          selectedIncident.priority >= 80
+            ? "bg-red-400"
+            : selectedIncident.priority >= 60
+              ? "bg-amber-400"
+              : "bg-cyan-400"
+        }`}
+        style={{
+          width: `${selectedIncident.priority}%`,
+        }}
+      />
 
-                      <div className="mt-3 rounded-xl border border-amber-300/10 bg-amber-300/[0.03] p-3">
+    </div>
 
-                        <div className="flex items-center gap-2 text-[10px] font-semibold text-amber-200">
+    {/* RESPONSE CLASSIFICATION */}
 
-                          <AlertTriangle className="h-3.5 w-3.5" />
+    <div className="mt-4 rounded-lg border border-white/5 bg-black/10 p-3">
 
-                          Why this incident matters
+      <div className="text-[9px] uppercase tracking-[0.16em] text-slate-600">
+        Response classification
+      </div>
 
-                        </div>
+      <div
+        className={`mt-1 text-xs font-semibold ${
+          selectedIncident.priority >= 80
+            ? "text-red-300"
+            : selectedIncident.priority >= 60
+              ? "text-amber-300"
+              : "text-cyan-300"
+        }`}
+      >
+        {selectedIncident.priority >= 80
+          ? "CRITICAL RESPONSE"
+          : selectedIncident.priority >= 60
+            ? "HIGH PRIORITY"
+            : "MONITOR"}
+      </div>
 
-                        <p className="mt-2 text-[10px] leading-5 text-slate-500">
-                          {selectedIncident.priorityRationale}
-                        </p>
+      <p className="mt-1 text-[10px] leading-4 text-slate-500">
+        {selectedIncident.priority >= 80
+          ? "Immediate verification and response coordination recommended."
+          : selectedIncident.priority >= 60
+            ? "Field verification should be coordinated and monitored closely."
+            : "Continue remote monitoring and reassess if conditions change."}
+      </p>
 
-                      </div>
+    </div>
 
-                    </div>
+  </div>
+
+  {/* PRIORITY FACTORS */}
+
+  <div className="mt-3 rounded-xl border border-white/5 bg-white/[0.02] p-4">
+
+    <div className="flex items-center justify-between">
+
+      <div>
+
+        <div className="text-[10px] font-semibold text-slate-200">
+          Priority factors
+        </div>
+
+        <div className="mt-0.5 text-[9px] text-slate-600">
+          Explainable decision signals
+        </div>
+
+      </div>
+
+      <Compass className="h-4 w-4 text-cyan-300" />
+
+    </div>
+
+    <div className="mt-4 space-y-3">
+
+      {/* CONFIDENCE */}
+
+      <div>
+
+        <div className="mb-1 flex items-center justify-between">
+
+          <span className="text-[9px] text-slate-500">
+            Detection confidence
+          </span>
+
+          <span className="text-[9px] font-semibold text-slate-300">
+            {(selectedIncident.confidence * 100).toFixed(0)}%
+          </span>
+
+        </div>
+
+        <div className="h-1.5 overflow-hidden rounded-full bg-white/5">
+
+          <div
+            className="h-full rounded-full bg-cyan-400"
+            style={{
+              width: `${selectedIncident.confidence * 100}%`,
+            }}
+          />
+
+        </div>
+
+      </div>
+
+      {/* DENSITY */}
+
+      <div>
+
+        <div className="mb-1 flex items-center justify-between">
+
+          <span className="text-[9px] text-slate-500">
+            Debris density
+          </span>
+
+          <span className="text-[9px] font-semibold text-slate-300">
+            {selectedIncident.density}
+          </span>
+
+        </div>
+
+        <div className="h-1.5 overflow-hidden rounded-full bg-white/5">
+
+          <div
+            className={`h-full rounded-full ${
+              selectedIncident.density === "High"
+                ? "bg-red-400"
+                : selectedIncident.density === "Medium"
+                  ? "bg-amber-400"
+                  : "bg-cyan-400"
+            }`}
+            style={{
+              width:
+                selectedIncident.density === "High"
+                  ? "100%"
+                  : selectedIncident.density === "Medium"
+                    ? "65%"
+                    : "35%",
+            }}
+          />
+
+        </div>
+
+      </div>
+
+      {/* COASTAL EXPOSURE */}
+
+      <div>
+
+        <div className="mb-1 flex items-center justify-between">
+
+          <span className="text-[9px] text-slate-500">
+            Coastal exposure
+          </span>
+
+          <span className="text-[9px] font-semibold text-slate-300">
+            {selectedIncident.coastalProximity}
+          </span>
+
+        </div>
+
+        <div className="h-1.5 overflow-hidden rounded-full bg-white/5">
+
+          <div
+            className="h-full rounded-full bg-amber-400"
+            style={{
+              width:
+                selectedIncident.priority >= 80
+                  ? "88%"
+                  : selectedIncident.priority >= 60
+                    ? "68%"
+                    : "42%",
+            }}
+          />
+
+        </div>
+
+      </div>
+
+      {/* HABITAT SENSITIVITY */}
+
+      <div>
+
+        <div className="mb-1 flex items-center justify-between">
+
+          <span className="text-[9px] text-slate-500">
+            Habitat sensitivity
+          </span>
+
+          <span className="text-[9px] font-semibold text-slate-300">
+            {selectedIncident.sensitivity}
+          </span>
+
+        </div>
+
+        <div className="h-1.5 overflow-hidden rounded-full bg-white/5">
+
+          <div
+            className="h-full rounded-full bg-red-300"
+            style={{
+              width:
+                selectedIncident.riskLevel === "Critical"
+                  ? "100%"
+                  : selectedIncident.riskLevel === "High"
+                    ? "82%"
+                    : selectedIncident.riskLevel === "Moderate"
+                      ? "60%"
+                      : "35%",
+            }}
+          />
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  {/* WHY THIS INCIDENT MATTERS */}
+
+  <div className="mt-3 rounded-xl border border-amber-300/10 bg-amber-300/[0.03] p-3">
+
+    <div className="flex items-center gap-2 text-[10px] font-semibold text-amber-200">
+
+      <AlertTriangle className="h-3.5 w-3.5" />
+
+      Why this incident matters
+
+    </div>
+
+    <p className="mt-2 text-[10px] leading-5 text-slate-500">
+      {selectedIncident.priorityRationale}
+    </p>
+
+  </div>
+
+</div>
 
                     {/* DRIFT FORECAST */}
 
