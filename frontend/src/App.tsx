@@ -1023,56 +1023,257 @@ function App() {
 
                     {/* DRIFT FORECAST */}
 
-                    <div>
+<div>
 
-                      <SectionTitle
-                        icon={<Waves className="h-4 w-4" />}
-                        title="Drift forecast"
-                      />
+  <SectionTitle
+    icon={<Waves className="h-4 w-4" />}
+    title="Drift forecast intelligence"
+  />
 
-                      <div className="mt-3 space-y-2">
+  {/* FORECAST SUMMARY */}
 
-                        {selectedIncident.forecast.map((point, index) => (
+  <div className="mt-3 rounded-xl border border-cyan-300/10 bg-cyan-300/[0.03] p-4">
 
-                          <div
-                            key={point.time}
-                            className="relative flex items-center gap-3 rounded-lg border border-white/5 bg-white/[0.02] p-3"
-                          >
+    <div className="flex items-start justify-between gap-4">
 
-                            {index < selectedIncident.forecast.length - 1 && (
-                              <div className="absolute left-[18px] top-[32px] h-5 w-px bg-cyan-300/20" />
-                            )}
+      <div>
 
-                            <div className="relative z-10 flex h-2.5 w-2.5 shrink-0 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(34,211,238,.5)]" />
+        <div className="text-[9px] uppercase tracking-[0.18em] text-slate-500">
+          Projected movement
+        </div>
 
-                            <div className="w-8 text-[10px] font-semibold text-cyan-300">
-                              {point.time}
-                            </div>
+        <div className="mt-1 text-lg font-semibold text-white">
+          {selectedIncident.forecast[
+            selectedIncident.forecast.length - 1
+          ]?.distance ?? "—"}
+        </div>
 
-                            <div className="min-w-0 flex-1">
+        <div className="mt-1 text-[10px] text-slate-500">
+          Maximum projected displacement · 48h horizon
+        </div>
 
-                              <div className="text-[10px] text-slate-300">
-                                {point.label}
-                              </div>
+      </div>
 
-                              <div className="mt-0.5 text-[9px] text-slate-600">
-                                {point.distance} projected • {point.direction}
-                              </div>
+      <div className="rounded-lg border border-cyan-300/10 bg-cyan-300/[0.05] px-3 py-2 text-right">
 
-                            </div>
+        <div className="text-[9px] uppercase tracking-wider text-slate-500">
+          Direction
+        </div>
 
-                            <div className="text-[9px] text-slate-600">
-                              DEMO
-                            </div>
+        <div className="mt-1 text-sm font-semibold text-cyan-300">
+          {selectedIncident.forecast[
+            selectedIncident.forecast.length - 1
+          ]?.direction ?? "—"}
+        </div>
 
-                          </div>
+      </div>
 
-                        ))}
+    </div>
 
-                      </div>
+    {/* MOVEMENT PROGRESS */}
 
-                    </div>
+    <div className="mt-4">
 
+      <div className="mb-2 flex items-center justify-between">
+
+        <span className="text-[9px] uppercase tracking-wider text-slate-600">
+          Movement progression
+        </span>
+
+        <span className="text-[9px] text-slate-600">
+          6h → 48h
+        </span>
+
+      </div>
+
+      <div className="flex items-center gap-1">
+
+        {selectedIncident.forecast.map((point, index) => (
+
+          <div
+            key={point.time}
+            className="flex flex-1 items-center"
+          >
+
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/5">
+
+              <div
+                className="h-full rounded-full bg-cyan-400"
+                style={{
+                  width: `${Math.min(
+                    100,
+                    ((parseFloat(point.distance) /
+                      Math.max(
+                        1,
+                        parseFloat(
+                          selectedIncident.forecast[
+                            selectedIncident.forecast.length - 1
+                          ]?.distance ?? "1",
+                        ),
+                      )) *
+                      100),
+                  )}%`,
+                }}
+              />
+
+            </div>
+
+            {index < selectedIncident.forecast.length - 1 && (
+              <div className="mx-1 h-1 w-1 shrink-0 rounded-full bg-cyan-300/30" />
+            )}
+
+          </div>
+
+        ))}
+
+      </div>
+
+    </div>
+
+  </div>
+
+  {/* FORECAST TIMELINE */}
+
+  <div className="mt-4">
+
+    <div className="mb-2 flex items-center justify-between">
+
+      <div className="text-[9px] uppercase tracking-[0.18em] text-slate-500">
+        Forecast timeline
+      </div>
+
+      <div className="text-[9px] text-cyan-300/70">
+        SIMULATED MODEL
+      </div>
+
+    </div>
+
+    <div className="space-y-2">
+
+      {selectedIncident.forecast.map((point, index) => {
+
+        const finalDistance = parseFloat(
+          selectedIncident.forecast[
+            selectedIncident.forecast.length - 1
+          ]?.distance ?? "1",
+        );
+
+        const currentDistance = parseFloat(point.distance);
+
+        const progression = Math.min(
+          100,
+          Math.max(0, (currentDistance / finalDistance) * 100),
+        );
+
+        return (
+          <div
+            key={point.time}
+            className="relative overflow-hidden rounded-xl border border-white/5 bg-white/[0.02] p-3"
+          >
+
+            {/* PROGRESSION */}
+
+            <div
+              className="absolute inset-y-0 left-0 bg-cyan-300/[0.025]"
+              style={{
+                width: `${progression}%`,
+              }}
+            />
+
+            <div className="relative z-10 flex items-center gap-3">
+
+              {/* TIME */}
+
+              <div className="flex h-9 w-10 shrink-0 items-center justify-center rounded-lg border border-cyan-300/10 bg-cyan-300/[0.05]">
+
+                <span className="text-[10px] font-bold text-cyan-300">
+                  {point.time}
+                </span>
+
+              </div>
+
+              {/* EVENT */}
+
+              <div className="min-w-0 flex-1">
+
+                <div className="text-[10px] font-medium text-slate-200">
+                  {point.label}
+                </div>
+
+                <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[9px] text-slate-600">
+
+                  <span>
+                    {point.distance} displacement
+                  </span>
+
+                  <span className="text-slate-700">
+                    •
+                  </span>
+
+                  <span>
+                    Direction {point.direction}
+                  </span>
+
+                </div>
+
+              </div>
+
+              {/* STATUS */}
+
+              <div className="hidden shrink-0 text-right sm:block">
+
+                <div className="text-[9px] uppercase tracking-wider text-slate-600">
+                  Projection
+                </div>
+
+                <div className="mt-1 text-[9px] font-medium text-cyan-300/70">
+                  {index === 0
+                    ? "BASELINE"
+                    : index === selectedIncident.forecast.length - 1
+                      ? "48H OUTLOOK"
+                      : "TRACKING"}
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        );
+      })}
+
+    </div>
+
+  </div>
+
+  {/* FORECAST INTERPRETATION */}
+
+  <div className="mt-4 rounded-xl border border-amber-300/10 bg-amber-300/[0.025] p-4">
+
+    <div className="flex items-center gap-2">
+
+      <AlertTriangle className="h-3.5 w-3.5 text-amber-300" />
+
+      <span className="text-[10px] font-semibold text-amber-200">
+        Operational interpretation
+      </span>
+
+    </div>
+
+    <p className="mt-2 text-[10px] leading-5 text-slate-500">
+
+      The simulated trajectory indicates continued movement toward the
+      projected {selectedIncident.forecast[
+        selectedIncident.forecast.length - 1
+      ]?.direction ?? "target"} sector over the forecast horizon.
+      Increasing displacement may expand the potential accumulation zone
+      and should be considered during verification planning.
+
+    </p>
+
+  </div>
+
+</div>
                     {/* RECOMMENDATION */}
 
                     <div className="rounded-xl border border-cyan-300/10 bg-cyan-300/[0.03] p-4">
