@@ -754,42 +754,162 @@ function App() {
 
                     {/* DETECTION INTELLIGENCE */}
 
-                    <div>
+<div>
 
-                      <SectionTitle
-                        icon={<Eye className="h-4 w-4" />}
-                        title="AI detection intelligence"
-                      />
+  <SectionTitle
+    icon={<Eye className="h-4 w-4" />}
+    title="AI detection intelligence"
+  />
 
-                      <div className="mt-3 grid grid-cols-2 gap-2">
+  {/* AI CONFIDENCE */}
 
-                        <Detail label="Confidence">
-                          {(selectedIncident.confidence * 100).toFixed(0)}%
-                        </Detail>
+  <div className="mt-3 rounded-xl border border-cyan-300/10 bg-cyan-300/[0.03] p-4">
 
-                        <Detail label="Debris density">
-                          {selectedIncident.density}
-                        </Detail>
+    <div className="flex items-end justify-between">
 
-                        <Detail label="Debris type">
-                          {selectedIncident.debrisType}
-                        </Detail>
+      <div>
 
-                        <Detail label="Estimated area">
-                          {selectedIncident.estimatedArea}
-                        </Detail>
+        <div className="text-[9px] uppercase tracking-[0.16em] text-slate-500">
+          AI detection confidence
+        </div>
 
-                        <Detail label="Detection source">
-                          {selectedIncident.detectionSource}
-                        </Detail>
+        <div className="mt-1 text-2xl font-semibold text-cyan-300">
+          {(selectedIncident.confidence * 100).toFixed(0)}%
+        </div>
 
-                        <Detail label="Detected">
-                          {selectedIncident.detectedAgo}
-                        </Detail>
+      </div>
 
-                      </div>
+      <div
+        className={`rounded-full border px-2 py-1 text-[9px] font-semibold ${
+          selectedIncident.confidence >= 0.9
+            ? "border-emerald-300/20 bg-emerald-300/10 text-emerald-300"
+            : selectedIncident.confidence >= 0.75
+              ? "border-amber-300/20 bg-amber-300/10 text-amber-300"
+              : "border-red-300/20 bg-red-300/10 text-red-300"
+        }`}
+      >
+        {selectedIncident.confidence >= 0.9
+          ? "HIGH CONFIDENCE"
+          : selectedIncident.confidence >= 0.75
+            ? "MODERATE CONFIDENCE"
+            : "LOW CONFIDENCE"}
+      </div>
 
-                    </div>
+    </div>
+
+    <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/5">
+
+      <div
+        className={`h-full rounded-full transition-all ${
+          selectedIncident.confidence >= 0.9
+            ? "bg-cyan-400"
+            : selectedIncident.confidence >= 0.75
+              ? "bg-amber-400"
+              : "bg-red-400"
+        }`}
+        style={{
+          width: `${selectedIncident.confidence * 100}%`,
+        }}
+      />
+
+    </div>
+
+    <div className="mt-2 flex justify-between text-[9px] text-slate-600">
+      <span>AI model confidence</span>
+      <span>
+        {(selectedIncident.confidence * 100).toFixed(0)} / 100
+      </span>
+    </div>
+
+  </div>
+
+  {/* DETECTION ATTRIBUTES */}
+
+  <div className="mt-3 grid grid-cols-2 gap-2">
+
+    <Detail label="Debris density">
+      {selectedIncident.density}
+    </Detail>
+
+    <Detail label="Debris type">
+      {selectedIncident.debrisType}
+    </Detail>
+
+    <Detail label="Estimated area">
+      {selectedIncident.estimatedArea}
+    </Detail>
+
+    <Detail label="Detection source">
+      {selectedIncident.detectionSource}
+    </Detail>
+
+    <Detail label="Detected">
+      {selectedIncident.detectedAgo}
+    </Detail>
+
+    <Detail label="Detection ID">
+      {selectedIncident.id}
+    </Detail>
+
+  </div>
+
+  {/* AI ASSESSMENT */}
+
+  <div className="mt-3 rounded-xl border border-white/5 bg-white/[0.02] p-4">
+
+    <div className="flex items-center gap-2">
+
+      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-cyan-400/10">
+
+        <Crosshair className="h-3.5 w-3.5 text-cyan-300" />
+
+      </div>
+
+      <div>
+
+        <div className="text-[10px] font-semibold text-slate-200">
+          AI detection assessment
+        </div>
+
+        <div className="text-[9px] text-slate-600">
+          Automated interpretation
+        </div>
+
+      </div>
+
+    </div>
+
+    <p className="mt-3 text-[10px] leading-5 text-slate-500">
+
+      The detection model identifies a{" "}
+
+      <span className="font-medium text-slate-300">
+        {selectedIncident.density.toLowerCase()}-density
+      </span>{" "}
+
+      debris signature classified as{" "}
+
+      <span className="font-medium text-slate-300">
+        {selectedIncident.debrisType.toLowerCase()}
+      </span>
+      . The estimated affected area is{" "}
+
+      <span className="font-medium text-slate-300">
+        {selectedIncident.estimatedArea}
+      </span>{" "}
+
+      with a model confidence of{" "}
+
+      <span className="font-medium text-cyan-300">
+        {(selectedIncident.confidence * 100).toFixed(0)}%
+      </span>
+      .
+
+    </p>
+
+  </div>
+
+</div>
 
                     {/* ENVIRONMENT */}
 
