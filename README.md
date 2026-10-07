@@ -64,17 +64,17 @@ Convert identified incidents into actionable field workflows such as verificatio
 
 OceanShield AI follows a modular frontend–backend architecture.
 
-'''text
+```text
                     OCEANSHIELD AI
                            │
                            ▼
               ┌───────────────────────┐
-              │   React Frontend      │
+              │    React Frontend     │
               │                       │
-              │ Dashboard             │
-              │ GIS Map               │
-              │ Incidents             │
-              │ Analytics             │
+              │  Dashboard            │
+              │  GIS Map              │
+              │  Incidents            │
+              │  Analytics            │
               └───────────┬───────────┘
                           │
                      HTTP / JSON
@@ -83,48 +83,44 @@ OceanShield AI follows a modular frontend–backend architecture.
               ┌───────────────────────┐
               │    FastAPI Backend    │
               │                       │
-              │ API Routes            │
-              │ Detection Service     │
-              │ Drift Forecast        │
-              │ Priority Scoring      │
-              │ Incident Management   │
+              │  API Routes           │
+              │  Detection Service    │
+              │  Drift Forecast       │
+              │  Priority Scoring     │
+              │  Incident Management  │
               └───────────┬───────────┘
                           │
                           ▼
               ┌───────────────────────┐
               │      Data Layer       │
               │                       │
-              │ SQLite / GeoJSON      │
+              │   SQLite / GeoJSON    │
               └───────────────────────┘
+```
 
+### Data Flow
 
-
-
-
-
-## Data Flow
+```text
 User
- ↓
+  ↓
 React Dashboard
- ↓
+  ↓
 TanStack Query
- ↓
+  ↓
 FastAPI REST API
- ↓
+  ↓
 Service Layer
- ↓
+  ↓
 Database / GeoJSON
- ↓
+  ↓
 API Response
- ↓
+  ↓
 Dashboard Visualization
+```
+## 📁 Project Structure
 
----
-
-##📁 Project Structure
-
+```text
 OceanShield-AI/
-│
 ├── frontend/
 │   ├── src/
 │   ├── public/
@@ -139,9 +135,7 @@ OceanShield-AI/
 ├── models/
 ├── docs/
 └── README.md
-
----
-
+```
 
 ##💻 Frontend
 
