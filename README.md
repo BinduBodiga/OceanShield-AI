@@ -96,7 +96,10 @@ OceanShield AI follows a modular frontend–backend architecture.
               │                       │
               │ SQLite / GeoJSON      │
               └───────────────────────┘
-              '''
+
+
+
+
 ---
 
 ## Data Flow
