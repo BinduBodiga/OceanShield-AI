@@ -64,7 +64,7 @@ Convert identified incidents into actionable field workflows such as verificatio
 
 OceanShield AI follows a modular frontend–backend architecture.
 
-```text
+'
                     OCEANSHIELD AI
                            │
                            ▼
@@ -96,8 +96,9 @@ OceanShield AI follows a modular frontend–backend architecture.
               │                       │
               │ SQLite / GeoJSON      │
               └───────────────────────┘
+---
 
-              Data Flow
+## Data Flow
 User
  ↓
 React Dashboard
@@ -114,7 +115,10 @@ API Response
  ↓
 Dashboard Visualization
 
-📁 Project Structure
+---
+
+##📁 Project Structure
+
 OceanShield-AI/
 │
 ├── frontend/
@@ -132,8 +136,10 @@ OceanShield-AI/
 ├── docs/
 └── README.md
 
+---
 
-💻 Frontend
+
+##💻 Frontend
 
 The current application provides an interactive coastal intelligence dashboard containing:
 
@@ -144,9 +150,10 @@ Priority analysis
 Incident management
 Coastal map visualization
 Verification and response status
+---
 
 
-📊 Current Project Status
+##📊 Current Project Status
 
 Current stage: Frontend prototype / hackathon implementation
 
@@ -161,15 +168,19 @@ Real-time drift prediction
 Advanced geospatial analytics
 Production database
 Automated field-response workflows
+---
 
 
-⚠️ Disclaimer
+##⚠️ Disclaimer
 
 OceanShield AI is currently a prototype.
 
 The displayed detection, forecasting, and priority information may use simulated or demonstration data and should not be treated as real environmental monitoring data.
 
-👩‍💻 Author
+---
+
+
+##👩‍💻 Author
 
 Bindu Bodiga
 
