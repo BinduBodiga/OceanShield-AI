@@ -64,7 +64,7 @@ Convert identified incidents into actionable field workflows such as verificatio
 
 OceanShield AI follows a modular frontend–backend architecture.
 
-'''
+'''text
                     OCEANSHIELD AI
                            │
                            ▼
